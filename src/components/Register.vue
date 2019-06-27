@@ -5,7 +5,8 @@
             <v-text-field v-model="nickname" :counter="15" :rules="nickRules" label="Nickname" required/>
             <v-text-field v-model="email" :rules="emailRules" label="E-mail" required/>
             <v-text-field v-model="password" type="password" :counter="15" :rules="passRules" label="Password" required/>
-            <v-btn :disabled="!valid" color="primary" @click="validate">Registrarse</v-btn>
+            <v-btn :disabled="!valid" color="error" @click="validate">Registrarse</v-btn>
+             <v-btn outline round block color="warning" @click="goToLogin()">Si ya tienes cuenta, ¡entra!</v-btn>
         </v-form>
     </v-container>
 </template>
@@ -35,6 +36,9 @@ export default {
   methods:{
     submit() {
       
+    },
+    goToLogin(){
+        this.$router.replace('/login');
     }
   }
 }
@@ -49,5 +53,9 @@ export default {
         opacity: 0.8;
         padding: 60px;
         text-align: center;
+    }
+
+     v-btn{
+        margin: 50px 0 0;
     }
 </style>

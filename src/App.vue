@@ -9,13 +9,13 @@
     </v-toolbar>
 
     <v-navigation-drawer v-model="drawer" fixed clipped app>
-      <v-list-tile class="mt-3">
+      <v-list-tile class="mt-3" @click="goToComponent('login')" @click.stop="drawer = !drawer">
           <v-list-tile-action>
           <v-icon color="grey darken-1">face</v-icon>
           </v-list-tile-action>
           <v-list-tile-title class="grey--text text--darken-1">LOGIN / REGISTRO</v-list-tile-title>
       </v-list-tile>
-      <v-list-tile>
+      <v-list-tile  @click="goToComponent('oakPokedex')" @click.stop="drawer = !drawer">
           <v-list-tile-action>
           <v-icon color="grey darken-1">donut_small</v-icon>
           </v-list-tile-action>
@@ -56,6 +56,12 @@ export default {
     return {
       drawer: false
     } 
+  },
+  methods: {
+    goToComponent(component){
+      this.$router.replace(`/${component}`);
+    }
+
   }
 }
 
