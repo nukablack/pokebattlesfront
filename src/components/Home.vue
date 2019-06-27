@@ -2,7 +2,7 @@
   <div class="row">
 		<div id="home" class="col-sm-12 text-center">
 			<div class="background">
-				<h1>Welcome to</h1>
+				<h1>Bienvenid@ a</h1>
 				<img id="pokebattles-logo" alt="PokeBattles Logo" src="../assets/logo.png"/>
       </div>
 		</div>
@@ -29,7 +29,7 @@ export default {
   width: 20%;
 }
 
-h1, h2 {
+h1 {
   font-family: "Mali";
   margin: 6%; 
   margin-bottom: 0;
@@ -38,9 +38,9 @@ h1, h2 {
 .background{
   background: #eee;
   border-radius: 50px;
-  opacity: 0.8;
-  max-width: 60%;
   margin: 0 auto;
+  max-width: 60%;
+  opacity: 0.8;
   padding: 20px 0; 
   text-align: center;
 }

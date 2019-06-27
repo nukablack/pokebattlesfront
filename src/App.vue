@@ -13,7 +13,7 @@
           <v-list-tile-action>
           <v-icon color="grey darken-1">face</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">LOGIN / REGISTER</v-list-tile-title>
+          <v-list-tile-title class="grey--text text--darken-1">LOGIN / REGISTRO</v-list-tile-title>
       </v-list-tile>
       <v-list-tile>
           <v-list-tile-action>
@@ -23,9 +23,21 @@
       </v-list-tile>
       <v-list-tile @click="">
           <v-list-tile-action>
-          <v-icon color="grey darken-1">settings</v-icon>
+          <v-icon color="grey darken-1">help</v-icon>
           </v-list-tile-action>
           <v-list-tile-title class="grey--text text--darken-1">CÓMO JUGAR</v-list-tile-title>
+      </v-list-tile>
+      <v-list-tile @click="">
+          <v-list-tile-action>
+          <v-icon color="grey darken-1">info</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title class="grey--text text--darken-1">ABOUT</v-list-tile-title>
+      </v-list-tile>
+       <v-list-tile @click="">
+          <v-list-tile-action>
+          <v-icon color="grey darken-1">logout</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title class="grey--text text--darken-1">LOGOUT</v-list-tile-title>
       </v-list-tile>
     </v-navigation-drawer> 
     <v-content>
