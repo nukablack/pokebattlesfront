@@ -19,10 +19,6 @@ export default {
 </script>
 
 <style>
-body{
-  background-image: url('../assets/bg.png');
-}
-
 #home {
 		height: 800px;
 		padding: 10%;
