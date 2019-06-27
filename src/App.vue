@@ -69,6 +69,8 @@ export default {
 
 <style>
   #background{
-    background-image: url('assets/bg.png')
+    background-image: url('assets/bg.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 </style>

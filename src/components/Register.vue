@@ -48,6 +48,7 @@ export default {
     #form{
         background: #eee;
         border-radius: 50px;
+        font-family: "Mali";
         margin-top: 5%;
         max-width: 800px;
         opacity: 0.8;
