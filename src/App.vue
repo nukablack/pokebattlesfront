@@ -6,6 +6,8 @@
       <v-toolbar-title class="mr-5 align-center">
         <span class="title">PokeBattles</span>
       </v-toolbar-title>
+      <v-spacer/>
+      <v-btn color="white" outline round @click="goToComponent('fight')">¡Pelear!</v-btn>
     </v-toolbar>
 
     <v-navigation-drawer v-model="drawer" fixed clipped app>

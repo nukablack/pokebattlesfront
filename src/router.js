@@ -5,6 +5,7 @@ import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 import About from './components/About.vue'
 import OakPokedex from './components/OakPokedex.vue'
+import Fight from './components/Fight.vue'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
       path: '/oakPokedex',
       name: 'oakpokedex',
       component: OakPokedex
+    },
+    {
+      path: '/fight',
+      name: 'fight',
+      component: Fight
     }
   ]
 })
