@@ -29,8 +29,8 @@
                 </div>
                 <div class="text-box-right">
                     <div id="battleOptions">
-                        <button class="btn-hit" round @click="">HIT</button>
-                        <button class="btn-run" round @click="">RUN</button>
+                        <button class="btn-hit" @click="attack()">HIT</button>
+                        <button class="btn-run">RUN</button>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,13 @@ export default {
             userPokemon: {},
             opponentPokemon: {},
             userStartHp: 0,
-            opponentStartHp: 0
+            opponentStartHp: 0,
+            userHpBar: {
+                width: "100%"
+            },
+            opponentHpBar: {
+                width: "100%"
+            }
         }
     },
     async mounted(){
@@ -86,6 +92,56 @@ export default {
             this.opponentPokemon = { ...this.pokemons[this.randomInt(0, max)] };
             this.changeStats(this.opponentPokemon);
             this.opponentStartHp = this.opponentPokemon.hp;
+            this.opponentHpBar.width = "100%";
+        },
+        attack(){
+            //Primero ataca el usuario
+            let userAttack = this.userPokemon.attack;
+            let hitDmg = parseInt(this.randomInt((userAttack/2), userAttack).toFixed(0));
+            console.log("User DMG: " + hitDmg);
+            this.makeDamage(hitDmg, this.opponentPokemon);
+            this.checkHealth(this.opponentPokemon);
+
+            //Luego ataca la IA.
+            let opponentAttack = this.opponentPokemon.attack;
+            hitDmg = parseInt(this.randomInt((opponentAttack/2), opponentAttack).toFixed(0));
+            console.log("Enemy DMG: " + hitDmg);
+            this.makeDamage(hitDmg, this.userPokemon);
+            this.checkHealth(this.userPokemon);
+        },
+        makeDamage(dmg, target){
+            let defense = target.defense;
+            let defPoints = parseInt(this.randomInt(0, defense).toFixed(0));
+            console.log("DEF: " + defPoints);
+            let received = dmg - defPoints;
+
+            if(received > 0){
+                target.hp -= received;
+            }
+        },
+        checkHealth(pokemon){
+            let quantity = pokemon.hp;
+            let life = 0;
+            switch(pokemon){
+                case this.opponentPokemon:
+                    life = (quantity / this.opponentStartHp) * 100;
+                    this.opponentHpBar.width = `${life}%`;
+                    break;
+                case this.userPokemon:
+                    life = (quantity / this.userStartHp) * 100;
+                    this.userHpBar.width = `${life}%`;
+                    break;
+            }
+
+            if(this.opponentPokemon.hp <= 0){
+                this.opponentPokemon.hp = 0;
+                alert("Has ganado esta pelea. Pulsa para recibir otro pokemon.");
+                this.setOpponent();
+            } else if (this.userPokemon.hp <= 0){
+                this.userPokemon.hp = 0;
+                alert("Has perdido esta pelea. Pulsa para volver atrás");
+                this.$router.replace("/");
+            }
         }
     }
 }
@@ -104,6 +160,7 @@ Red: #FA5956
 LightRed: #FA887E
 DarkBlue: #087082
 Blue: #0A8AA1
+Green: #67D67F
 */
 .battle-scene{
     position: relative;
@@ -156,7 +213,7 @@ Blue: #0A8AA1
   position: absolute;
   height: 100%;
   border-radius: 20px;
-  background: #FF8800;
+  background: #67D67F;
 }
 
 .shadow-right{
