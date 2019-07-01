@@ -1,8 +1,41 @@
 <template>
-    <v-content>
-        <img :src="userPokemon.gifs.back"/>
-        <img :src="opponentPokemon.gifs.front"/>
-    </v-content>
+    <div id="app">
+        <div class="battle-scene">
+            <div class="box-top-left">
+                <h2 class="pokemon">{{opponentPokemon.name}}</h2>
+                <div class="hp-bar-top">
+                    <div v-bind:style="opponentHpBar" class="hp-bar-fill"></div>
+                </div>
+                <h4 class="level">Nv1</h4>
+                <h4 class="hp">{{opponentPokemon.hp}}/{{opponentStartHp}}</h4>
+            </div>
+            <div class="shadow-right">
+                <img :src="opponentPokemon.gifs.front" class="pokemon-top" />
+            </div>
+                <div class="shadow-left">
+                <img :src="userPokemon.gifs.back" class="pokemon-bottom" />
+            </div>
+            <div class="box-bottom-right">
+                <h2 class="pokemon"> {{userPokemon.name}}</h2>
+                <div class="hp-bar-bottom">
+                    <div v-bind:style="userHpBar" class="hp-bar-fill"></div>
+                </div>
+                <h4 class="level">Nv1</h4>
+                <h4 class="hp">{{userPokemon.hp}}/{{userStartHp}}</h4>
+            </div>
+            <div class="bottom-menu">
+                <div class="battle-text text-box-left">
+                    ¿Qué hará {{userPokemon.name}}?
+                </div>
+                <div class="text-box-right">
+                    <div id="battleOptions">
+                        <button class="btn-hit" round @click="">HIT</button>
+                        <button class="btn-run" round @click="">RUN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -13,7 +46,9 @@ export default {
         return{
             pokemons: [],
             userPokemon: {},
-            opponentPokemon: {}
+            opponentPokemon: {},
+            userStartHp: 0,
+            opponentStartHp: 0
         }
     },
     async mounted(){
@@ -21,7 +56,6 @@ export default {
         let response = await axios.get(url);
 
         let pokemonFound = response.data;
-        console.log(pokemonFound)
         this.pokemons = pokemonFound;
 
         this.setFighter();
@@ -45,11 +79,13 @@ export default {
             let max = this.pokemons.length; 
             this.userPokemon = { ...this.pokemons[this.randomInt(0, max)] };
             this.changeStats(this.userPokemon);
+            this.userStartHp = this.userPokemon.hp;
         },
         setOpponent(){
             let max = this.pokemons.length; 
             this.opponentPokemon = { ...this.pokemons[this.randomInt(0, max)] };
             this.changeStats(this.opponentPokemon);
+            this.opponentStartHp = this.opponentPokemon.hp;
         }
     }
 }
@@ -57,18 +93,214 @@ export default {
 </script>
 
 <style>
-    #form{
-        background: #eee;
-        border-radius: 50px;
-        font-family: "Mali";
-        margin-top: 5%;
-        max-width: 800px;
-        opacity: 0.8;
-        padding: 60px;
-        text-align: center;
-    }
+/* 
+Colours
+Base: #F7F9FA
+DarkGray: #6A7175
+Gray: #797A7A
+LightGray:#C5C6C7
+DarkRed: #BD4240
+Red: #FA5956
+LightRed: #FA887E
+DarkBlue: #087082
+Blue: #0A8AA1
+*/
+.battle-scene{
+    position: relative;
+    margin: auto;
+    display: block;
+    margin-top: 3%;
+    width: 800px;
+    height: 500px;
+    background: #F8F8F8;
+    opacity: 0.9;
+    border-radius: 30px;
+    z-index: 1;
+}
 
-    v-btn{
-        margin: 50px 0 0;
-    }
+.box-top-left{
+  position: absolute;
+  width: 300px;
+  height: 100px;
+  border-radius: 0px 50px;
+  top: 8%;
+  left: 8%;
+  background: #F7F9FA;
+  border: 3px solid #6A7175;
+  box-shadow: inset 5px 5px 20px #6A7175;
+}
+
+.hp-bar-top{
+  position: absolute;
+  bottom: 32%;
+  height: 20%;
+  width: 70%;
+  left: 10%;
+  border-radius: 20px;
+  background: grey;
+  opacity: 0.5;
+}
+
+.hp-bar-bottom{
+  position: absolute;
+  bottom: 32%;
+  height: 20%;
+  width: 70%;
+  left: 10%;
+  border-radius: 20px;
+  background: grey;
+  opacity: 0.5;
+}
+
+.hp-bar-fill{
+  position: absolute;
+  height: 100%;
+  border-radius: 20px;
+  background: #FF8800;
+}
+
+.shadow-right{
+  position: absolute;
+  width: 30%;
+  height: 20%;
+  border-radius: 50%;
+  top: 25%;
+  right: 8%;
+  background: #E0E0E0;
+  box-shadow: inset 0 5px 5px #6A7175;
+}
+
+.pokemon-top{
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  top: -80%;
+  left: 25%;
+}
+
+.pokemon-bottom{
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  top: -75%;
+  left: 25%;
+}
+
+.shadow-left{
+ position: absolute;
+  width: 30%;
+  height: 20%;
+  border-radius: 50%;
+  bottom: 15%;
+  left: 8%;
+  background: #E0E0E0;
+  box-shadow: inset 0 5px 5px #6A7175;
+}
+
+.box-bottom-right{
+  position: absolute;
+  width: 300px;
+  height: 100px;
+  border-radius: 50px 0px;
+  bottom:20%;
+  right: 8%;
+  background: #F7F9FA;
+  border: 3px solid #6A7175;
+  z-index: 2;
+  box-shadow: inset 5px 5px 20px #797A7A;
+}
+
+.pokemon{
+  text-align: left;
+  margin-left: 10%;
+  margin-top: 5%;
+  opacity: 0.7;
+  font-size: 18px;
+  font-family: "Mali";
+}
+
+.level{
+  position: absolute;
+  right: 10%;
+  top: 18%;
+  opacity: 0.7;
+  font-size: 16px;
+  font-family: "Mali";
+}
+
+.hp{
+  position: absolute;
+  right: 20%;
+  bottom: 10%;
+  opacity: 0.7;
+  font-size: 14px;
+  font-family: "Mali";
+}
+
+.bottom-menu{
+  position: absolute;
+  width: 100%;
+  bottom: 0%;
+  height: 19%;
+  background: #FA887E;
+  z-index: 1;
+  border: solid 3px #6A7175;
+  border-radius: 30px;
+  box-shadow: inset 0 5px 5px #FA5956;
+}
+
+.text-box-left{
+  position: absolute;
+  width: 50%;
+  left: 0%;
+  height: 95%;
+}
+
+.text-box-right{
+  position: absolute;
+  width: 40%;
+  right: 0%;
+  height: 100%;
+  background: #C5C6C7;
+  border-radius: 25px;
+  border: solid 3px #6A7175;
+  box-shadow: inset 5px 5px 20px #6A7175;
+}
+
+.battle-text{
+  margin-top: 3%;
+  margin-left: 5%;
+  opacity: 0.95;
+  font-size: 18px;
+  color: white;
+  text-align: left;
+  font-family: "Mali";
+}
+
+button{
+    padding: 10px 35px;
+    border-radius: 50px;
+    color: white;
+    box-shadow: inset 5px 5px 20px #C5C6C7;
+    font-weight: bold;
+}
+
+.btn-hit{
+    background: #FA5956;
+    margin: 20px 40px;
+}
+
+.btn-hit:hover{
+    background: #BD4240
+}
+
+.btn-run{
+    background: #0A8AA1;
+}
+
+.btn-run:hover{
+    background: #087082;
+}
+
+
 </style>
