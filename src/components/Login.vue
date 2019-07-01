@@ -3,7 +3,7 @@
         <h1>¡ HOLA DE NUEVO !</h1>
         <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field v-model="nickname" label="Nickname" required/>
-            <v-text-field v-model="password" type="password" label="Password" required/>
+            <v-text-field v-model="password" type="password" label="Contraseña" required/>
             <v-btn :disabled="!valid" color="error" @click="validate">Entrar</v-btn>
             <br>
             <v-btn outline round block color="warning" @click="goToRegister()">¿Aún no tienes cuenta? ¡Regístrate!</v-btn>
