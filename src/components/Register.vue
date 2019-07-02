@@ -1,10 +1,10 @@
 <template>
     <v-container id="form">
         <h1>¡ REGÍSTRATE !</h1>
-        <v-form ref="form" v-model="this.valid" lazy-validation>
-            <v-text-field v-model="this.nickname" :counter="15" :rules="this.nickRules" label="Nickname" required/>
-            <v-text-field v-model="this.email" :rules="this.emailRules" label="E-mail" required/>
-            <v-text-field v-model="this.password" type="password" :counter="15" :rules="this.passRules" label="Contraseña" required/>
+        <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="nickname" :counter="15" :rules="nickRules" label="Nickname" required/>
+            <v-text-field v-model="email" :rules="emailRules" label="E-mail" required/>
+            <v-text-field v-model="password" type="password" :counter="15" :rules="passRules" label="Contraseña" required/>
             <v-container>
               <h4>¡SELECCIONA TU POKÉMON!</h4>
                 <v-container class="pokemonSelectors">
@@ -45,7 +45,6 @@ export default {
       email: '',
       nickname: '',
       password: '',
-      pokemonSelected: '',
       emailRules: [
         v => !!v || 'E-mail es obligatorio',
         v => /.+@.+/.test(v) || 'E-mail debe ser válido.'
@@ -62,9 +61,6 @@ export default {
     },
     goToLogin(){
         this.$router.replace('/login');
-    },
-    selectPokemon(id){
-      this.pokemonSelected = id;
     }
   }
 }
@@ -117,8 +113,20 @@ v-btn{
 .squirtle{
   border: 2px solid #0A8AA1;
 }
+
 .selected{
-  box-shadow: inset 5px 5px 20px #6A7175;
+  border: 4px solid #67D67F;
+  box-shadow: inset 5px 5px 20px #67D67F;
+}
+
+.charSelected{
+  border: 4px solid #FA5956;
+  box-shadow: inset 5px 5px 20px #FA5956;
+}
+
+.squiSelected{
+  border: 4px solid #0A8AA1;
+  box-shadow: inset 5px 5px 20px #0A8AA1;
 }
 
 .pokemons:hover{
