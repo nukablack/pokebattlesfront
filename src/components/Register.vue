@@ -7,13 +7,14 @@
             <v-text-field v-model="password" type="password" :counter="15" :rules="passRules" label="Contraseña" required/>
             <v-container>
               <h4>¡SELECCIONA TU POKÉMON!</h4>
+              <p>Seleccionado: {{selected}}</p>
                 <v-container class="pokemonSelectors">
-                  <img class="pokemons bulbasaur" :src="this.pokemons[0].sprites.front" @click="selectPokemon('001')"/>
-                  <img class="pokemons charmander" :src="this.pokemons[3].sprites.front" @click="selectPokemon('004')"/>
-                  <img class="pokemons squirtle" :src="this.pokemons[6].sprites.front" @click="selectPokemon('007')"/>
+                  <img class="pokemons bulbasaur" :src="this.pokemons[0].sprites.front" @click="selectPokemon(pokemons[0])"/>
+                  <img class="pokemons charmander" :src="this.pokemons[3].sprites.front" @click="selectPokemon(pokemons[3])"/>
+                  <img class="pokemons squirtle" :src="this.pokemons[6].sprites.front" @click="selectPokemon(pokemons[6])"/>
                 </v-container>
             </v-container>
-            <v-btn :disabled="!valid" color="error" @click="validate">Registrarse</v-btn>
+            <v-btn :disabled="!valid" color="error" @click="submit()">Registrarse</v-btn>
             <v-btn outline round block color="warning" @click="goToLogin()">Si ya tienes cuenta, ¡entra!</v-btn>
         </v-form>
     </v-container>
@@ -45,6 +46,13 @@ export default {
       email: '',
       nickname: '',
       password: '',
+      selected: '',
+      selectedPokemon: [{
+        hp: 0,
+        attack: 0,
+        defense: 0,
+        pokemonId: ''
+      }],
       emailRules: [
         v => !!v || 'E-mail es obligatorio',
         v => /.+@.+/.test(v) || 'E-mail debe ser válido.'
@@ -56,11 +64,42 @@ export default {
     }
   },
   methods:{
-    submit() {
-      
+    submit() { 
+        let user ={
+            email: this.email,
+            nickname: this.nickname,
+            password: this.password,
+            poke_squad: {
+              hp: this.selectedPokemon[0].hp, 
+              attack: this.selectedPokemon[0].attack,
+              defense: this.selectedPokemon[0].defense,
+              pokemonId: this.selectedPokemon[0].pokeId
+            },
+            pokedex: this.selectedPokemon[0].pokeId
+        }
+        console.log(user);
+        axios.post('https://pokebattles.herokuapp.com/api/v1/users', user)
+        .then(res => {
+            if(res.status === 201){
+              alert('Usuario registrado');
+              this.$router.push('/login');
+            }
+        }, err => {
+            console.log(err.response);
+        })
     },
     goToLogin(){
         this.$router.replace('/login');
+    },
+    selectPokemon(pokemon){
+      this.selectedPokemon[0].hp = pokemon.hp;
+      this.selectedPokemon[0].attack = pokemon.attack;
+      this.selectedPokemon[0].defense = pokemon.defense;
+      this.selectedPokemon[0].pokeId = pokemon._id;
+
+      this.selected = pokemon.name;
+
+      
     }
   }
 }

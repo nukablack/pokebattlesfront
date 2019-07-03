@@ -41,7 +41,8 @@ export default new Router({
     {
       path: '/fight',
       name: 'fight',
-      component: Fight
+      component: Fight,
+      meta: {requiresAuth: true }
     }
   ]
 })

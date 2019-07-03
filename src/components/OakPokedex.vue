@@ -30,7 +30,7 @@ export default {
         let response = await axios.get(url);
 
         let pokemonFound = response.data;
-        this.pokemons= pokemonFound
+        this.pokemons = pokemonFound
     },
     methods: {
         getTypes(pokemon){

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <div class="battle-scene">
+        <div class="battle-scene" v-if="loaded">
             <div class="box-top-left">
                 <h2 class="pokemon">{{opponentPokemon.name}}</h2>
                 <div class="hp-bar-top">
@@ -13,19 +13,19 @@
                 <img :src="opponentPokemon.gifs.front" class="pokemon-top" />
             </div>
                 <div class="shadow-left">
-                <img :src="userPokemon.gifs.back" class="pokemon-bottom" />
+                <img :src="userPokemon.pokemonInfo.gif" class="pokemon-bottom" />
             </div>
             <div class="box-bottom-right">
-                <h2 class="pokemon"> {{userPokemon.name}}</h2>
+                <h2 class="pokemon"> {{userPokemon.pokemonInfo.name}}</h2>
                 <div class="hp-bar-bottom">
                     <div v-bind:style="userHpBar" class="hp-bar-fill"></div>
                 </div>
                 <h4 class="level">Nv1</h4>
-                <h4 class="hp">{{userPokemon.hp}}/{{userStartHp}}</h4>
+                <h4 class="hp">{{userPokemon.poke_squad.hp}}/{{userStartHp}}</h4>
             </div>
             <div class="bottom-menu">
                 <div class="battle-text text-box-left">
-                    ¿Qué hará {{userPokemon.name}}?
+                    ¿Qué hará {{userPokemon.pokemonInfo.name}}?
                 </div>
                 <div class="text-box-right">
                     <div id="battleOptions">
@@ -44,6 +44,7 @@ import axios from 'axios';
 export default {
     data(){
         return{
+            loaded: false,
             pokemons: [],
             userPokemon: {},
             opponentPokemon: {},
@@ -58,15 +59,26 @@ export default {
         }
     },
     async mounted(){
-        let url = `https://pokebattles.herokuapp.com/api/v1/pokemons`;
-        let response = await axios.get(url);
+        let currentUser = this.$store.getters.getCurrentUser
+        let urlPokemons = 'http://localhost:3000/api/v1/pokemons';
+        let urlUser = `http://localhost:3000/api/v1/users/${currentUser}`;
 
-        let pokemonFound = response.data;
-        this.pokemons = pokemonFound;
+        axios.all([
+            axios.get(urlPokemons),
+            axios.get(urlUser)
+        ])
+        .then(axios.spread( (pokemonResponse, userResponse) =>{
 
-        this.setFighter();
-        this.setOpponent();
+            let pokemonFound = pokemonResponse.data;
+            let userFound = userResponse.data;
+            this.pokemons = pokemonFound;
 
+            this.userPokemon = userFound;
+            this.userStartHp = this.userPokemon.poke_squad.hp;
+            this.setOpponent();
+
+            this.loaded=true
+        }));
     },
     methods: {
         randomInt(min, max){
@@ -81,12 +93,6 @@ export default {
             pokemon.hp = hp;
             pokemon.defense = defense;
         },
-        setFighter(){
-            let max = this.pokemons.length; 
-            this.userPokemon = { ...this.pokemons[this.randomInt(0, max)] };
-            this.changeStats(this.userPokemon);
-            this.userStartHp = this.userPokemon.hp;
-        },
         setOpponent(){
             let max = this.pokemons.length; 
             this.opponentPokemon = { ...this.pokemons[this.randomInt(0, max)] };
@@ -96,23 +102,20 @@ export default {
         },
         attack(){
             //Primero ataca el usuario
-            let userAttack = this.userPokemon.attack;
+            let userAttack = this.userPokemon.poke_squad.attack;
             let hitDmg = parseInt(this.randomInt((userAttack/2), userAttack).toFixed(0));
-            console.log("User DMG: " + hitDmg);
             this.makeDamage(hitDmg, this.opponentPokemon);
             this.checkHealth(this.opponentPokemon);
 
             //Luego ataca la IA.
             let opponentAttack = this.opponentPokemon.attack;
             hitDmg = parseInt(this.randomInt((opponentAttack/2), opponentAttack).toFixed(0));
-            console.log("Enemy DMG: " + hitDmg);
-            this.makeDamage(hitDmg, this.userPokemon);
-            this.checkHealth(this.userPokemon);
+            this.makeDamage(hitDmg, this.userPokemon.poke_squad);
+            this.checkHealth(this.userPokemon.poke_squad);
         },
         makeDamage(dmg, target){
             let defense = target.defense;
             let defPoints = parseInt(this.randomInt(0, defense).toFixed(0));
-            console.log("DEF: " + defPoints);
             let received = dmg - defPoints;
 
             if(received > 0){
@@ -120,26 +123,30 @@ export default {
             }
         },
         checkHealth(pokemon){
-            let quantity = pokemon.hp;
+            let quantity = 0;
             let life = 0;
             switch(pokemon){
                 case this.opponentPokemon:
+                    quantity = pokemon.hp;
                     life = (quantity / this.opponentStartHp) * 100;
+                    if(life < 0) { life = 0 }
                     this.opponentHpBar.width = `${life}%`;
                     break;
-                case this.userPokemon:
+                case this.userPokemon.poke_squad:
+                    quantity = pokemon.hp;
                     life = (quantity / this.userStartHp) * 100;
+                    if(life < 0) { life = 0 }
                     this.userHpBar.width = `${life}%`;
                     break;
             }
 
             if(this.opponentPokemon.hp <= 0){
                 this.opponentPokemon.hp = 0;
-                alert("Has ganado esta pelea. Pulsa para recibir otro pokemon.");
+                //alert("Has ganado esta pelea. Pulsa para recibir otro pokemon.");
                 this.setOpponent();
-            } else if (this.userPokemon.hp <= 0){
-                this.userPokemon.hp = 0;
-                alert("Has perdido esta pelea. Pulsa para volver atrás");
+            } else if (this.userPokemon.poke_squad.hp <= 0){
+                this.userPokemon.poke_squad.hp = 0;
+                //alert("Has perdido esta pelea. Pulsa para volver atrás");
                 this.$router.replace("/");
             }
         }
@@ -231,15 +238,15 @@ Green: #67D67F
   height: 100px;
   width: 100px;
   position: absolute;
-  top: -80%;
-  left: 25%;
+  top: -50%;
+  left: 30%;
 }
 
 .pokemon-bottom{
   height: 100px;
   width: 100px;
   position: absolute;
-  top: -75%;
+  top: -50%;
   left: 25%;
 }
 
