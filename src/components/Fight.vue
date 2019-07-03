@@ -35,6 +35,16 @@
                 </div>
             </div>
         </div>
+
+        <v-dialog v-model="dialog" persistent max-width="290">
+            <v-card>
+                <v-card-text>{{ text }}</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn :color="color" flat @click="closeModal">{{ buttonText }}</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -47,6 +57,7 @@ export default {
             loaded: false,
             pokemons: [],
             userPokemon: {},
+            userAlive: true,
             opponentPokemon: {},
             userStartHp: 0,
             opponentStartHp: 0,
@@ -55,7 +66,12 @@ export default {
             },
             opponentHpBar: {
                 width: "100%"
-            }
+            },
+            text: '',
+            buttonText: '',
+            dialog: false,
+            color: '',
+            paused: false
         }
     },
     async mounted(){
@@ -142,12 +158,25 @@ export default {
 
             if(this.opponentPokemon.hp <= 0){
                 this.opponentPokemon.hp = 0;
-                //alert("Has ganado esta pelea. Pulsa para recibir otro pokemon.");
+                this.openModal('Has ganado esta pelea', 'Continuar peleando', 'success');
                 this.setOpponent();
             } else if (this.userPokemon.poke_squad.hp <= 0){
                 this.userPokemon.poke_squad.hp = 0;
-                //alert("Has perdido esta pelea. Pulsa para volver atrás");
-                this.$router.replace("/");
+                this.userAlive = false
+                this.openModal('Has perdido...', 'Salir', 'error');
+                
+            }
+        },
+        openModal(text, buttonText, color){
+            this.text = text
+            this.buttonText = buttonText
+            this.color = color
+            this.dialog = true
+        },
+        closeModal(){
+            this.dialog = false;
+            if(!this.userAlive){
+                this.$router.replace("/dashboard");
             }
         }
     }

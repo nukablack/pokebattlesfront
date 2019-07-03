@@ -4,7 +4,7 @@
     <v-toolbar color="red" dense fixed clipped-left app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="mr-5 align-center">
-        <span class="title" @click="goToComponent('')">PokeBattles</span>
+        <span class="title" @click="goToComponent('dashboard')">PokeBattles</span>
       </v-toolbar-title>
       <v-spacer/>
       <div class="welcome" v-if="isAuthUser">Bienvenido/a, <span class="username">{{getCurrentUser}}</span></div>

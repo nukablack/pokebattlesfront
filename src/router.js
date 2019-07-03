@@ -6,6 +6,7 @@ import Login from './components/Login.vue'
 import About from './components/About.vue'
 import OakPokedex from './components/OakPokedex.vue'
 import Fight from './components/Fight.vue'
+import Dashboard from './components/Dashboard.vue'
 
 Vue.use(Router)
 
@@ -42,7 +43,13 @@ export default new Router({
       path: '/fight',
       name: 'fight',
       component: Fight,
-      meta: {requiresAuth: true }
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
+      meta: { requiresAuth: true }
     }
   ]
 })

@@ -66,7 +66,7 @@ export default {
         this.snackbar = true
     },
     redirect(){
-        setTimeout(() => this.$router.push('/'), 2000);
+        setTimeout(() => this.$router.push('/dashboard'), 2000);
     }
   }
 }
