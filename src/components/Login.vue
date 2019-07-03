@@ -1,5 +1,11 @@
 <template>
     <v-container id="form">
+        <v-snackbar v-model="snackbar" bottom right :timeout="timeout" :color="color">
+            {{ text }}
+            <v-btn color="white" flat @click="snackbar = false">
+                OK!
+            </v-btn>
+        </v-snackbar>
         <h1>¡ HOLA DE NUEVO !</h1>
         <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field v-model="nickname" label="Nickname" required/>
@@ -9,6 +15,7 @@
             <v-btn outline round block color="warning" @click="goToRegister()">¿Aún no tienes cuenta? ¡Regístrate!</v-btn>
         </v-form>
     </v-container>
+    
 </template>
 
 <script>
@@ -20,9 +27,16 @@ export default {
   components: {
   },
   data: () => ({
-      valid: false,
-      nickname: '',
-      password: ''
+    valid: false,
+    delay: 5000,
+    nickname: '',
+    password: '',
+    //snackbar
+    snackbar: false,
+    text: '',
+    color: '',
+    timeout: 6000
+      //end-snackbar
     }),
   methods:{
     submit() { 
@@ -31,20 +45,28 @@ export default {
             password: this.password
         }
 
-        axios.post('http://localhost:3000/api/v1/login', user)
+        axios.post('https://pokebattles.herokuapp.com/api/v1/login', user)
         .then(res => {
             if(res.status === 200){
                 this.$store.commit('setToken', res.data.token)
-                alert(`Bienvenido ${user.nickname}`)
-                this.$router.replace('/');
+                this.showSnackbar('Te has logueado correctamente.', 'success');
+                this.redirect()
             }
         }, err => {
-            alert('Error en el login. Datos erróneos.');
+            this.showSnackbar('Error en el login. Datos erróneos', 'error');
             this.error = err.response.data.error
         })
     },
     goToRegister(){
         this.$router.replace('/register');
+    },
+    showSnackbar(text, type){
+        this.text = text
+        this.color = type
+        this.snackbar = true
+    },
+    redirect(){
+        setTimeout(() => this.$router.push('/'), 2000);
     }
   }
 }

@@ -4,10 +4,11 @@
     <v-toolbar color="red" dense fixed clipped-left app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="mr-5 align-center">
-        <span class="title">PokeBattles</span>
+        <span class="title" @click="goToComponent('')">PokeBattles</span>
       </v-toolbar-title>
       <v-spacer/>
-      <v-btn color="white" outline round @click="goToComponent('fight')" v-if="isAuthUser">¡Pelear!</v-btn>
+      <div class="welcome" v-if="isAuthUser">Bienvenido/a, <span class="username">{{getCurrentUser}}</span></div>
+      <!--v-btn color="white" outline round @click="goToComponent('fight')" v-if="isAuthUser">¡Pelear!</v-btn-->
     </v-toolbar>
 
     <v-navigation-drawer v-model="drawer" fixed clipped app>
@@ -56,7 +57,7 @@ export default {
   },
   data(){
     return {
-      drawer: false
+      drawer: false,
     } 
   },
   methods: {
@@ -71,6 +72,9 @@ export default {
   computed: {
     isAuthUser: function() {
       return  this.$store.getters.isAuthUser
+    },
+    getCurrentUser: function(){
+      return this.$store.getters.getCurrentUser
     }
   }
 }
@@ -82,5 +86,19 @@ export default {
     background-image: url('assets/bg.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
+  }
+  .title{
+    cursor: pointer;
+  }
+
+  .welcome{
+    color: white;
+    font-size: 14px;
+    font-family: 'Mali'
+  }
+
+  .username{
+    font-weight: bolder;
+    font-size: 18px;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="bg">
         <div class="battle-scene" v-if="loaded">
             <div class="box-top-left">
                 <h2 class="pokemon">{{opponentPokemon.name}}</h2>
@@ -60,8 +60,8 @@ export default {
     },
     async mounted(){
         let currentUser = this.$store.getters.getCurrentUser
-        let urlPokemons = 'http://localhost:3000/api/v1/pokemons';
-        let urlUser = `http://localhost:3000/api/v1/users/${currentUser}`;
+        let urlPokemons = 'https://pokebattles.herokuapp.com/api/v1/pokemons';
+        let urlUser = `https://pokebattles.herokuapp.com/api/v1/users/${currentUser}`;
 
         axios.all([
             axios.get(urlPokemons),
@@ -169,6 +169,7 @@ DarkBlue: #087082
 Blue: #0A8AA1
 Green: #67D67F
 */
+
 .battle-scene{
     position: relative;
     margin: auto;

@@ -1,5 +1,11 @@
 <template>
-    <v-container id="form">
+    <v-container id="form" v-if="loaded">
+      <v-snackbar v-model="snackbar" bottom right :timeout="timeout" :color="color">
+          {{ text }}
+          <v-btn color="white" flat @click="snackbar = false">
+              OK!
+          </v-btn>
+      </v-snackbar>
         <h1>¡ REGÍSTRATE !</h1>
         <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field v-model="nickname" :counter="15" :rules="nickRules" label="Nickname" required/>
@@ -34,10 +40,16 @@ export default {
 
       let pokemonFound = response.data.splice(0,7);
       this.pokemons = pokemonFound;
+      this.loaded = true;
   },
   data(){
     return{
+      loaded: false,
       pokemons: [],
+      snackbar: false,
+      text: '',
+      color: '',
+      timeout: 5000,
       valid: false,
       nickRules: [
         v => !!v || 'El nick es obligatorio',
@@ -46,12 +58,12 @@ export default {
       email: '',
       nickname: '',
       password: '',
-      selected: '',
+      selected: 'Bulbasaur',
       selectedPokemon: [{
-        hp: 0,
-        attack: 0,
-        defense: 0,
-        pokemonId: ''
+        hp: 45,
+        attack: 49,
+        defense: 49,
+        pokemonId: '5d1a5828caa01f9634b33577'
       }],
       emailRules: [
         v => !!v || 'E-mail es obligatorio',
@@ -77,15 +89,15 @@ export default {
             },
             pokedex: this.selectedPokemon[0].pokeId
         }
-        console.log(user);
+
         axios.post('https://pokebattles.herokuapp.com/api/v1/users', user)
         .then(res => {
             if(res.status === 201){
-              alert('Usuario registrado');
-              this.$router.push('/login');
+              this.showSnackbar('Te has registrado correctamente.', 'success');
+              this.redirect()
             }
         }, err => {
-            console.log(err.response);
+            this.showSnackbar('Ha habido un error en el registro.', 'error');
         })
     },
     goToLogin(){
@@ -98,8 +110,14 @@ export default {
       this.selectedPokemon[0].pokeId = pokemon._id;
 
       this.selected = pokemon.name;
-
-      
+    },
+    showSnackbar(text, type){
+        this.text = text
+        this.color = type
+        this.snackbar = true
+    },
+    redirect(){
+        setTimeout(() => this.$router.push('/login'), 2000);
     }
   }
 }
