@@ -3,6 +3,10 @@
       <v-card id="pokemon-card" v-for="pokemon in pokemons" :key="pokemon.pokeId">
         <p class="pokeId"><strong>#{{pokemon.pokeId}}</strong> </p>
         <v-img :src="pokemon.sprites.front" id="poke-sprite"></v-img>
+        <v-badge>
+            <template v-if="pokemon.footprint !== ''" v-slot:badge bottom><img :src="pokemon.footprint"/></template>
+        </v-badge>
+        
         <v-card-title primary-title>
             <div id="stats"> 
                 <p class="name"><strong>Nombre: </strong>{{pokemon.name}}</p>

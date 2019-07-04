@@ -11,7 +11,7 @@ Vue.config.productionTip = false
 
 router.beforeEach((to,from,next) => {
 
-  let isLogin = to.matched.some( record => (record.name === "login" || record.name === "register" ));
+  let isLogin = to.matched.some( record => (record.name === "login" || record.name === "register"));
   let requiresAuth = to.matched.some( record => record.meta.requiresAuth);
   let isAuthUser = store.getters.isAuthUser
 

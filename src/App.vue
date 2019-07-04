@@ -30,7 +30,7 @@
           </v-list-tile-action>
           <v-list-tile-title class="grey--text text--darken-1">CÓMO JUGAR</v-list-tile-title>
       </v-list-tile>
-      <v-list-tile @click="" @click.stop="drawer = !drawer" >
+      <v-list-tile @click="goToComponent('about')" @click.stop="drawer = !drawer" >
           <v-list-tile-action>
           <v-icon color="grey darken-1">info</v-icon>
           </v-list-tile-action>

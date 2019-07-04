@@ -1,5 +1,5 @@
 <template>
-    <v-layout id="main" row wrap>
+    <v-layout id="dashboard" row wrap>
         <v-card class="card">
             <img src="../assets/trainer.png" id="profile-icon">
             <v-card-title primary-title>
@@ -52,7 +52,7 @@ Blue: #0A8AA1
 Green: #67D67F
 */
 
-    #main{
+    #dashboard{
         font-family: "Mali";
         text-align: center;
         padding-top: 10%;
