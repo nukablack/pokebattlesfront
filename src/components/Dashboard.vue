@@ -74,6 +74,8 @@ Green: #67D67F
 
      .card:hover{
         border: 3px solid black;
+        box-shadow: inset 5px 5px 20px black;
+        text-shadow: 0 0 0.2em white, 0 0 0.2em black;
     }
 
     .target{
