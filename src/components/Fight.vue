@@ -30,7 +30,7 @@
                 <div class="text-box-right">
                     <div id="battleOptions">
                         <button class="btn-hit" @click="attack()">HIT</button>
-                        <button class="btn-run">RUN</button>
+                        <button class="btn-run" @click="openModal('No puedes huir, cobarde...', ':(', 'black')">RUN</button>
                     </div>
                 </div>
             </div>
