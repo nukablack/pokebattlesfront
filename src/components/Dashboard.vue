@@ -1,22 +1,28 @@
 <template>
     <v-layout id="main" row wrap>
-      <v-card id="pokemon-card" @click="alert('Hola')">
-        <p class="pokeId"><strong>#</strong> </p>
-        <v-card-title primary-title>
-            <div id="stats"> 
-                <p class="name"><strong>Nombre: </strong>#</p>
-                <p class="height"><strong>Altura: </strong>#</p>
-                <p class="weight"><strong>Peso: </strong>#</p>
-                <p class="types"><strong>Tipo: </strong>#</p>
-            </div>
-        </v-card-title>
-      </v-card>
+        <v-card class="card">
+            <img src="../assets/trainer.png" id="profile-icon">
+            <v-card-title primary-title>
+                <p class="target">PERFIL</p>
+            </v-card-title>
+        </v-card>
+        <v-card class="card" @click="goToComponent('fight')">
+            <img src="../assets/fight.png" id="fight-icon">
+            <v-card-title primary-title>
+                <p class="target">PELEAR</p>
+            </v-card-title>
+        </v-card>
+        <v-card class="card">
+            <img src="../assets/gym.png" id="gym-icon">
+            <v-card-title primary-title>
+                <p class="target">GIMNASIOS</p>
+            </v-card-title>
+        </v-card>
   </v-layout>
 </template>
 
 
 <script>
-import axios from 'axios';
 
 export default {
     data(){
@@ -24,44 +30,60 @@ export default {
         }
     },
     methods: {
+        goToComponent(component){
+        this.$router.replace(`/${component}`);
+        }
     }
 }
 </script>
 
 <style>
+/* 
+Colours
+Base: #F7F9FA
+DarkGray: #6A7175
+Gray: #797A7A
+LightGray:#C5C6C7
+DarkRed: #BD4240
+Red: #FA5956
+LightRed: #FA887E
+DarkBlue: #087082
+Blue: #0A8AA1
+Green: #67D67F
+*/
+
     #main{
-        font-family: "Mali"
+        font-family: "Mali";
+        text-align: center;
+        padding-top: 10%;
+        padding-left: 20%;
     }
 
-    #pokemon-card:hover{
-        border: 5px solid black;
-    }
-    #pokemon-card {
-        border: 3px solid red;
+    .card {
+        float: left;
+        background: #F7F9FA;
         border-radius: 30px;
-        height: 320px;
-        margin: 30px;
-        padding-left: 20px;
+        height: 280px;
+        margin: 60px;
+        padding: 50px;
         opacity: 0.9;
         width: 250px;
         cursor: pointer;
+        box-shadow: inset 5px 5px 20px #6A7175;
     }
 
-    #pokemon-card p{
-        margin: 0 auto;
+     .card:hover{
+        border: 3px solid black;
     }
 
-    #stats p{
-        margin: 0 auto;
+    .target{
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 30px;
     }
 
-    .pokeId{
-        font-size: 20px;
-        margin: 0 auto;
-    }
-    #poke-sprite{
+    img{
         max-width: 150px;
-        margin: 0 auto;
     }
 </style>
 
